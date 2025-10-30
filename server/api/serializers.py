@@ -44,10 +44,17 @@ class UserWithDriverSerializer(serializers.Serializer):
     driver = DriverSerializer(read_only=True)
 
 
-class AuthTokenResponseSerializer(serializers.Serializer):
+class AuthTokenDataSerializer(serializers.Serializer):
     access = serializers.CharField()
     refresh = serializers.CharField()
     user = UserWithDriverSerializer()
+
+
+class AuthTokenResponseSerializer(serializers.Serializer):
+    success = serializers.BooleanField()
+    message = serializers.CharField()
+    data = AuthTokenDataSerializer()
+    error = serializers.JSONField(allow_null=True)
 
 
 class RegisterSerializer(serializers.Serializer):
@@ -69,6 +76,16 @@ class RegisterSerializer(serializers.Serializer):
 
     def validate_password(self, value):
         validate_password(value)
+        return value
+
+    def validate_username(self, value):
+        if User.objects.filter(username=value).exists():
+            raise serializers.ValidationError('Username already exists')
+        return value
+
+    def validate_email(self, value):
+        if User.objects.filter(email=value).exists():
+            raise serializers.ValidationError('Email already exists')
         return value
 
     def create(self, validated_data):
@@ -96,19 +113,39 @@ class LoginRequestSerializer(serializers.Serializer):
     password = serializers.CharField()
 
 
-class ProfileResponseSerializer(serializers.Serializer):
+class ProfileDataSerializer(serializers.Serializer):
     user = UserWithDriverSerializer()
 
 
-class HelloResponseSerializer(serializers.Serializer):
+class ProfileResponseSerializer(serializers.Serializer):
+    success = serializers.BooleanField()
     message = serializers.CharField()
-    status = serializers.CharField()
+    data = ProfileDataSerializer()
+    error = serializers.JSONField(allow_null=True)
+
+
+class HelloDataSerializer(serializers.Serializer):
+    message = serializers.CharField()
     version = serializers.CharField()
 
 
-class HealthResponseSerializer(serializers.Serializer):
+class HelloResponseSerializer(serializers.Serializer):
+    success = serializers.BooleanField()
+    message = serializers.CharField()
+    data = HelloDataSerializer()
+    error = serializers.JSONField(allow_null=True)
+
+
+class HealthDataSerializer(serializers.Serializer):
     status = serializers.CharField()
     service = serializers.CharField()
+
+
+class HealthResponseSerializer(serializers.Serializer):
+    success = serializers.BooleanField()
+    message = serializers.CharField()
+    data = HealthDataSerializer()
+    error = serializers.JSONField(allow_null=True)
 
 
 class ActivitySerializer(serializers.ModelSerializer):

@@ -17,25 +17,31 @@ from .serializers import (
     HelloResponseSerializer,
     HealthResponseSerializer,
 )
+from .response import success_response, error_response
 
 
 @extend_schema(responses=HelloResponseSerializer)
 @api_view(['GET'])
 def hello_world(request):
-    return Response({
-        'message': 'Hello World!',
-        'status': 'API is running',
-        'version': '1.0.0'
-    }, status=status.HTTP_200_OK)
+    return success_response(
+        message='API is running',
+        data={
+            'message': 'Hello World!',
+            'version': '1.0.0'
+        }
+    )
 
 
 @extend_schema(responses=HealthResponseSerializer)
 @api_view(['GET'])
 def health_check(request):
-    return Response({
-        'status': 'healthy',
-        'service': 'driver-tracker-api'
-    }, status=status.HTTP_200_OK)
+    return success_response(
+        message='Service is healthy',
+        data={
+            'status': 'healthy',
+            'service': 'driver-tracker-api'
+        }
+    )
 
 
 @extend_schema(
@@ -70,12 +76,20 @@ def auth_register(request):
         user_data = UserSerializer(user).data
         driver = getattr(user, 'driver', None)
         driver_data = DriverSerializer(driver).data if driver else None
-        return Response({
-            'access': str(refresh.access_token),
-            'refresh': str(refresh),
-            'user': {**user_data, 'driver': driver_data}
-        }, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return success_response(
+            message='User registered successfully',
+            data={
+                'access': str(refresh.access_token),
+                'refresh': str(refresh),
+                'user': {**user_data, 'driver': driver_data}
+            },
+            status_code=status.HTTP_201_CREATED
+        )
+    return error_response(
+        message='Registration failed',
+        error=serializer.errors,
+        status_code=status.HTTP_400_BAD_REQUEST
+    )
 
 
 @extend_schema(
@@ -89,16 +103,23 @@ def auth_login(request):
     password = request.data.get('password')
     user = authenticate(username=username, password=password)
     if not user:
-        return Response({'detail': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+        return error_response(
+            message='Invalid credentials',
+            error={'detail': 'Username or password is incorrect'},
+            status_code=status.HTTP_401_UNAUTHORIZED
+        )
     refresh = RefreshToken.for_user(user)
     user_data = UserSerializer(user).data
     driver = getattr(user, 'driver', None)
     driver_data = DriverSerializer(driver).data if driver else None
-    return Response({
-        'access': str(refresh.access_token),
-        'refresh': str(refresh),
-        'user': {**user_data, 'driver': driver_data}
-    })
+    return success_response(
+        message='Login successful',
+        data={
+            'access': str(refresh.access_token),
+            'refresh': str(refresh),
+            'user': {**user_data, 'driver': driver_data}
+        }
+    )
 
 
 @extend_schema(responses=ProfileResponseSerializer)
@@ -108,5 +129,8 @@ def auth_profile(request):
     user_data = UserSerializer(request.user).data
     driver = getattr(request.user, 'driver', None)
     driver_data = DriverSerializer(driver).data if driver else None
-    return Response({'user': {**user_data, 'driver': driver_data}})
+    return success_response(
+        message='Profile retrieved successfully',
+        data={'user': {**user_data, 'driver': driver_data}}
+    )
 
