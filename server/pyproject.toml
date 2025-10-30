@@ -1,0 +1,21 @@
+[project]
+name = "server"
+version = "0.1.0"
+description = "Driver Tracker API Server"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "django>=5.2.0",
+    "djangorestframework>=3.15.0",
+    "django-cors-headers>=4.4.0",
+]
+
+[project.scripts]
+manage = "manage:main"
+dev = "tasks:dev"
+migrate = "tasks:migrate"
+makemigrations = "tasks:makemigrations"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
