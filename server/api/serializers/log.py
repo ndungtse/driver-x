@@ -7,7 +7,7 @@ class ActivitySerializer(serializers.ModelSerializer):
         model = Activity
         fields = [
             'id', 'status', 'start_time', 'end_time', 'duration_minutes', 'location',
-            'remark', 'miles_driven', 'sequence'
+            'end_location', 'remark', 'miles_driven', 'sequence'
         ]
         read_only_fields = ['id', 'duration_minutes', 'sequence']
 
@@ -16,7 +16,7 @@ class ActivityCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Activity
         fields = [
-            'status', 'start_time', 'end_time', 'location', 'remark', 'miles_driven'
+            'status', 'start_time', 'end_time', 'location', 'end_location', 'remark', 'miles_driven'
         ]
 
 
@@ -24,7 +24,7 @@ class ActivityUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Activity
         fields = [
-            'status', 'start_time', 'end_time', 'location', 'remark', 'miles_driven'
+            'status', 'start_time', 'end_time', 'location', 'end_location', 'remark', 'miles_driven'
         ]
 
 

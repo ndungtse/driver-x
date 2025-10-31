@@ -101,7 +101,8 @@ class Activity(models.Model):
     start_time = models.TimeField()
     end_time = models.TimeField()
     duration_minutes = models.PositiveIntegerField(default=0)
-    location = models.JSONField(default=dict)
+    location = models.JSONField(default=dict)  # Start location
+    end_location = models.JSONField(default=dict, blank=True)  # End location for map plotting
     remark = models.CharField(max_length=256, blank=True)
     miles_driven = models.FloatField(null=True, blank=True)
     sequence = models.PositiveIntegerField(default=0)

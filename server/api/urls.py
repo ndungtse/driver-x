@@ -7,18 +7,16 @@ from .views import trip, daily_log, activity, auth, common
 # Main router
 router = routers.DefaultRouter()
 router.register(r'trips', trip.TripViewSet, basename='trip')
+router.register(r'daily-logs', daily_log.DailyLogViewSet, basename='daily-log')
+router.register(r'activities', activity.ActivityViewSet, basename='activity')
 
 # Nested: /trips/{trip_pk}/daily-logs/
 trips_router = routers.NestedDefaultRouter(router, r'trips', lookup='trip')
 trips_router.register(r'daily-logs', daily_log.DailyLogViewSet, basename='trip-daily-logs')
 
 # Nested: /daily-logs/{daily_log_pk}/activities/
-logs_router = routers.NestedDefaultRouter(trips_router, r'daily-logs', lookup='daily_log')
+logs_router = routers.NestedDefaultRouter(router, r'daily-logs', lookup='daily_log')
 logs_router.register(r'activities', activity.ActivityViewSet, basename='daily-log-activities')
-
-# Also register flat routes for direct access
-router.register(r'daily-logs', daily_log.DailyLogViewSet, basename='daily-log')
-router.register(r'activities', activity.ActivityViewSet, basename='activity')
 
 urlpatterns = [
     # Utility endpoints
@@ -33,6 +31,6 @@ urlpatterns = [
     
     # REST API routes
     path('', include(router.urls)),
-    path('', include(trips_router.urls)),
-    path('', include(logs_router.urls)),
+    path('', include(trips_router.urls)),  # /trips/{trip_pk}/daily-logs/
+    path('', include(logs_router.urls)),  # /daily-logs/{daily_log_pk}/activities/
 ]

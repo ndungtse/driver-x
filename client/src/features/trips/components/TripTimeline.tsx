@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { format } from 'date-fns';
 import { AddActivityDrawer } from './AddActivityDrawer';
+import { ActivityItem } from './ActivityItem';
 import { PlusIcon, PlayIcon } from 'lucide-react';
 
 interface TripTimelineProps {
@@ -147,7 +148,12 @@ function DailyLogSection({ dailyLog, trip }: DailyLogSectionProps) {
           ) : (
             <div className="space-y-2">
               {activities.map((activity: any) => (
-                <ActivityItem key={activity.id} activity={activity} />
+                <ActivityItem
+                  key={activity.id}
+                  activity={activity}
+                  dailyLogId={dailyLog.id}
+                  trip={trip}
+                />
               ))}
             </div>
           )}
@@ -157,58 +163,3 @@ function DailyLogSection({ dailyLog, trip }: DailyLogSectionProps) {
   );
 }
 
-interface ActivityItemProps {
-  activity: any;
-}
-
-function ActivityItem({ activity }: ActivityItemProps) {
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'driving':
-        return 'default';
-      case 'on_duty_not_driving':
-        return 'secondary';
-      case 'off_duty':
-        return 'outline';
-      case 'sleeper_berth':
-        return 'outline';
-      default:
-        return 'secondary';
-    }
-  };
-
-  const formatStatus = (status: string) => {
-    return status.replace(/_/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
-  };
-
-  const startTime = activity.start_time;
-  const endTime = activity.end_time;
-  const durationHours = (activity.duration_minutes / 60).toFixed(1);
-
-  return (
-    <div className="flex items-start gap-4 p-3 border rounded-lg">
-      <Badge variant={getStatusColor(activity.status)}>
-        {formatStatus(activity.status)}
-      </Badge>
-      <div className="flex-1">
-        <div className="flex items-center gap-2 text-sm">
-          <span className="font-medium">{startTime}</span>
-          <span>-</span>
-          <span className="font-medium">{endTime}</span>
-          <span className="text-muted-foreground">({durationHours}h)</span>
-        </div>
-        <p className="text-sm text-muted-foreground">
-          {activity.location?.city || activity.location?.address || 'No location'}
-        </p>
-        {activity.remark && (
-          <p className="text-sm mt-1">{activity.remark}</p>
-        )}
-        {activity.status === 'driving' && activity.miles_driven && (
-          <p className="text-xs text-muted-foreground mt-1">
-            {activity.miles_driven.toFixed(0)} miles
-          </p>
-        )}
-      </div>
-    </div>
-  );
-}

@@ -17,12 +17,17 @@ class ActivityViewSet(viewsets.ModelViewSet):
     """
     ViewSet for managing activities.
     
-    Nested under daily-logs:
-    - GET /api/daily-logs/{log_id}/activities/ - list activities
-    - POST /api/daily-logs/{log_id}/activities/ - create activity (with cascade)
-    - GET /api/activities/{id}/ - retrieve activity
-    - PUT/PATCH /api/activities/{id}/ - update activity (with cascade)
-    - DELETE /api/activities/{id}/ - delete activity (extend previous)
+    Nested under daily-logs (not requiring trip_pk since daily_log has trip relation):
+    - GET /api/daily-logs/{daily_log_pk}/activities/ - list activities for daily log
+    - POST /api/daily-logs/{daily_log_pk}/activities/ - create activity (with cascade)
+    - GET /api/daily-logs/{daily_log_pk}/activities/{id}/ - retrieve activity
+    - PUT/PATCH /api/daily-logs/{daily_log_pk}/activities/{id}/ - update activity (with cascade)
+    - DELETE /api/daily-logs/{daily_log_pk}/activities/{id}/ - delete activity
+    
+    Also available as flat routes:
+    - GET /api/activities/{id}/ - retrieve activity directly
+    - PUT/PATCH /api/activities/{id}/ - update activity directly
+    - DELETE /api/activities/{id}/ - delete activity directly
     """
     permission_classes = [IsAuthenticated]
     

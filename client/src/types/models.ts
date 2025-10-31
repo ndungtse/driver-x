@@ -58,6 +58,7 @@ export interface Activity {
   end_time: string;
   duration_minutes: number;
   location: Location;
+  end_location?: Location;
   remark: string;
   miles_driven?: number | null;
   sequence: number;

@@ -60,6 +60,7 @@ export interface ActivityCreateData {
   start_time: string;
   end_time: string;
   location: Location;
+  end_location?: Location;
   remark: string;
   miles_driven?: number;
 }

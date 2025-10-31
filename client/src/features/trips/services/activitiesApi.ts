@@ -7,6 +7,7 @@ export interface ActivityUpdateData {
   start_time?: string;
   end_time?: string;
   location?: ActivityCreateData['location'];
+  end_location?: ActivityCreateData['end_location'];
   remark?: string;
   miles_driven?: number;
 }
