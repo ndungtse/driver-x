@@ -1,0 +1,28 @@
+{
+  "name": "driver-tracker",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm:dev:server\" \"npm:dev:client\"",
+    "dev:server": "cd server && uv run python manage.py runserver",
+    "dev:client": "cd client && pnpm dev",
+    "build": "npm run build:server && npm run build:client",
+    "build:server": "cd server && uv run python manage.py collectstatic --noinput",
+    "build:client": "cd client && pnpm build",
+    "start": "concurrently \"npm:start:server\" \"npm:start:client\"",
+    "start:server": "cd server && uv run python manage.py runserver",
+    "start:client": "cd client && pnpm start",
+    "setup": "npm run setup:server && npm run setup:client",
+    "setup:server": "cd server && uv sync && uv run python manage.py migrate",
+    "setup:client": "cd client && pnpm install",
+    "lint": "npm run lint:server && npm run lint:client",
+    "lint:server": "cd server && uv run python manage.py check",
+    "lint:client": "cd client && pnpm lint",
+    "migrate": "cd server && uv run python manage.py migrate",
+    "makemigrations": "cd server && uv run python manage.py makemigrations"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  }
+}
+
