@@ -1,0 +1,19 @@
+services:
+  # Django Application
+  api:
+    build: ./server
+    container_name: driver_tracker_api
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./server:/app
+
+  # Next.js Client Application
+  client:
+    build: ./client
+    container_name: driver_tracker_client
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./client:/app/client
+

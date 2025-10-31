@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import midnightStyle from "./midnight-style";
 import { useTheme } from "next-themes";
 

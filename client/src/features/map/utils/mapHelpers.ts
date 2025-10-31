@@ -16,3 +16,48 @@ export function calculateCenterFromLocations(locations: Array<{ latitude?: numbe
   };
 }
 
+export function calculateBoundsFromLocations(
+  locations: Array<{ latitude?: number; longitude?: number }>
+): google.maps.LatLngBounds | null {
+  if (typeof window === 'undefined' || !window.google?.maps) {
+    return null;
+  }
+
+  const validLocations = locations.filter(
+    (loc) => loc.latitude != null && loc.longitude != null
+  );
+
+  if (validLocations.length === 0) {
+    return null;
+  }
+
+  const bounds = new google.maps.LatLngBounds();
+
+  validLocations.forEach((loc) => {
+    bounds.extend(
+      new google.maps.LatLng(loc.latitude!, loc.longitude!)
+    );
+  });
+
+  return bounds;
+}
+
+export function extendBoundsWithLatLngs(
+  bounds: google.maps.LatLngBounds | null,
+  latLngs: google.maps.LatLng[]
+): google.maps.LatLngBounds | null {
+  if (typeof window === 'undefined' || !window.google?.maps) {
+    return null;
+  }
+
+  if (!bounds) {
+    bounds = new google.maps.LatLngBounds();
+  }
+
+  latLngs.forEach((latLng) => {
+    bounds!.extend(latLng);
+  });
+
+  return bounds;
+}
+

@@ -13,6 +13,7 @@ import { MapInfoWindow } from './MapInfoWindow';
 import { RequiredStopMarker } from './RequiredStopMarker';
 import { RoutePolyline } from './RoutePolyline';
 import { TripLocationMarker } from './TripLocationMarker';
+import { MapBoundsFitter } from './MapBoundsFitter';
 
 interface JourneyMapProps {
   trip: Trip;
@@ -60,12 +61,20 @@ export function JourneyMap({ trip, activities }: JourneyMapProps) {
       <Map
         defaultCenter={center}
         defaultZoom={6}
-        mapId={mapConfig.mapId}
+        mapId={mapConfig.mapId ?? null}
         styles={mapConfig.styles}
         gestureHandling="greedy"
-        disableDefaultUI={false}
+        disableDefaultUI={true}
         className="w-full h-full"
       >
+        <MapBoundsFitter
+          trip={trip}
+          activities={activities}
+          route={route}
+          requiredStops={requiredStops}
+          filters={filters}
+        />
+
         {route && <RoutePolyline route={route} />}
 
         <TripLocationMarker location={trip.current_location} type="start" />

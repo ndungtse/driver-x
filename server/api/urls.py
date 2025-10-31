@@ -19,10 +19,6 @@ logs_router = routers.NestedDefaultRouter(router, r'daily-logs', lookup='daily_l
 logs_router.register(r'activities', activity.ActivityViewSet, basename='daily-log-activities')
 
 urlpatterns = [
-    # Utility endpoints
-    path('hello/', common.hello_world, name='hello_world'),
-    path('health/', common.health_check, name='health_check'),
-    
     # Auth routes (function-based)
     path('auth/register/', auth.auth_register, name='auth_register'),
     path('auth/login/', auth.auth_login, name='auth_login'),
@@ -33,4 +29,8 @@ urlpatterns = [
     path('', include(router.urls)),
     path('', include(trips_router.urls)),  # /trips/{trip_pk}/daily-logs/
     path('', include(logs_router.urls)),  # /daily-logs/{daily_log_pk}/activities/
+
+    # Utility endpoints
+    path('hello/', common.hello_world, name='hello_world'),
+    path('health/', common.health_check, name='health_check'),
 ]
