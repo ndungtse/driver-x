@@ -10,7 +10,7 @@ export function useAuth() {
   const queryClient = useQueryClient();
   const [user, setUser] = useState<AuthTokens['user'] | null>(() => getUser());
 
-  const { data: profileData, isLoading } = useQuery({
+  const { data: profileData, isLoading, error: profileError } = useQuery({
     queryKey: ['auth', 'profile'],
     queryFn: async () => {
       const response = await authApi.getProfile();
@@ -39,6 +39,7 @@ export function useAuth() {
 
   return {
     user: profileData || user,
+    profileError,
     isLoading,
     isAuthenticated: !!user,
     logout,

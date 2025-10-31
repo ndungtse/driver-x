@@ -4,6 +4,7 @@ import { use } from 'react';
 import { useTrip } from '@/features/trips/hooks/useTrips';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card } from '@/components/ui/card';
+import { TripTimeline } from '@/features/trips/components/TripTimeline';
 
 export default function TripDetailPage({
   params,
@@ -25,7 +26,7 @@ export default function TripDetailPage({
   const trip = data.data;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 flex flex-col gap-4">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Trip #{trip.id}</h1>
@@ -43,12 +44,7 @@ export default function TripDetailPage({
         </TabsList>
 
         <TabsContent value="timeline" className="mt-6">
-          <Card>
-            <div className="p-6">
-              <h2 className="text-xl font-semibold mb-4">Timeline</h2>
-              <p className="text-muted-foreground">Timeline view coming soon...</p>
-            </div>
-          </Card>
+          <TripTimeline trip={trip} />
         </TabsContent>
 
         <TabsContent value="logbook" className="mt-6">

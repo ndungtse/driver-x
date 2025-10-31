@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 
 export default function RegisterPage() {
   return (
-    <Card>
+    <Card className="w-full max-w-xl">
       <CardHeader>
         <CardTitle>Register</CardTitle>
         <CardDescription>Create a new driver account</CardDescription>

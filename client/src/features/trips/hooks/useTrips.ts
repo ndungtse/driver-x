@@ -18,3 +18,5 @@ export function useTrip(id: number) {
   });
 }
 
+export { useCreateTrip } from './useCreateTrip';
+

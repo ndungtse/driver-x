@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 
 export default function LoginPage() {
   return (
-    <Card>
+    <Card className="w-full max-w-md">
       <CardHeader>
         <CardTitle>Login</CardTitle>
         <CardDescription>Sign in to your driver account</CardDescription>
