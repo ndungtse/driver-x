@@ -1,9 +1,9 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { LogbookView } from "@/features/logbook/components/LogbookView";
+import { JourneyMap } from "@/features/map/components/JourneyMap";
 import { AddActivityDrawer } from "@/features/trips/components/AddActivityDrawer";
 import { TripTimeline } from "@/features/trips/components/TripTimeline";
 import { useDailyLogs } from "@/features/trips/hooks/useDailyLogs";
@@ -11,7 +11,7 @@ import { useTrip } from "@/features/trips/hooks/useTrips";
 import { activeDailyLogAtom } from "@/lib/atoms";
 import { useAtom } from "jotai";
 import { PlusIcon } from "lucide-react";
-import { use, useState } from "react";
+import { use, useState, useMemo } from "react";
 
 export default function TripDetailPage({
   params,
@@ -25,6 +25,14 @@ export default function TripDetailPage({
     useDailyLogs(tripId);
   const [activeDailyLog, setActiveDailyLog] = useAtom(activeDailyLogAtom);
   const [activeTab, setActiveTab] = useState("timeline");
+
+  const allActivities = useMemo(() => {
+    if (!dailyLogsData?.success || !dailyLogsData.data) return [];
+
+    const logs = Array.isArray(dailyLogsData.data) ? dailyLogsData.data : [];
+    
+    return logs.flatMap((log) => log.activities || []);
+  }, [dailyLogsData]);
 
   if (isLoading) {
     return <div>Loading trip...</div>;
@@ -82,12 +90,7 @@ export default function TripDetailPage({
         </TabsContent>
 
         <TabsContent value="map" className="mt-6">
-          <Card>
-            <div className="p-6">
-              <h2 className="text-xl font-semibold mb-4">Journey Map</h2>
-              <p className="text-muted-foreground">Map view coming soon...</p>
-            </div>
-          </Card>
+          <JourneyMap trip={trip} activities={allActivities} />
         </TabsContent>
       </Tabs>
     </div>
