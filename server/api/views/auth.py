@@ -1,47 +1,19 @@
 from django.contrib.auth import authenticate
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 from drf_spectacular.utils import extend_schema, OpenApiResponse, OpenApiExample
 
-from .serializers import (
+from ..serializers import (
     RegisterSerializer,
     UserSerializer,
     DriverSerializer,
     AuthTokenResponseSerializer,
-    UserWithDriverSerializer,
     LoginRequestSerializer,
     ProfileResponseSerializer,
-    HelloResponseSerializer,
-    HealthResponseSerializer,
 )
-from .response import success_response, error_response
-
-
-@extend_schema(responses=HelloResponseSerializer)
-@api_view(['GET'])
-def hello_world(request):
-    return success_response(
-        message='API is running',
-        data={
-            'message': 'Hello World!',
-            'version': '1.0.0'
-        }
-    )
-
-
-@extend_schema(responses=HealthResponseSerializer)
-@api_view(['GET'])
-def health_check(request):
-    return success_response(
-        message='Service is healthy',
-        data={
-            'status': 'healthy',
-            'service': 'driver-tracker-api'
-        }
-    )
+from ..response import success_response, error_response
 
 
 @extend_schema(

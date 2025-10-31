@@ -1,14 +1,38 @@
-from django.urls import path
+from django.urls import path, include
+from rest_framework_nested import routers
 from rest_framework_simplejwt.views import TokenRefreshView
-from . import views
+
+from .views import trip, daily_log, activity, auth, common
+
+# Main router
+router = routers.DefaultRouter()
+router.register(r'trips', trip.TripViewSet, basename='trip')
+
+# Nested: /trips/{trip_pk}/daily-logs/
+trips_router = routers.NestedDefaultRouter(router, r'trips', lookup='trip')
+trips_router.register(r'daily-logs', daily_log.DailyLogViewSet, basename='trip-daily-logs')
+
+# Nested: /daily-logs/{daily_log_pk}/activities/
+logs_router = routers.NestedDefaultRouter(trips_router, r'daily-logs', lookup='daily_log')
+logs_router.register(r'activities', activity.ActivityViewSet, basename='daily-log-activities')
+
+# Also register flat routes for direct access
+router.register(r'daily-logs', daily_log.DailyLogViewSet, basename='daily-log')
+router.register(r'activities', activity.ActivityViewSet, basename='activity')
 
 urlpatterns = [
-    path('hello/', views.hello_world, name='hello_world'),
-    path('health/', views.health_check, name='health_check'),
-    # Auth
-    path('auth/register/', views.auth_register, name='auth_register'),
-    path('auth/login/', views.auth_login, name='auth_login'),
-    path('auth/profile/', views.auth_profile, name='auth_profile'),
+    # Utility endpoints
+    path('hello/', common.hello_world, name='hello_world'),
+    path('health/', common.health_check, name='health_check'),
+    
+    # Auth routes (function-based)
+    path('auth/register/', auth.auth_register, name='auth_register'),
+    path('auth/login/', auth.auth_login, name='auth_login'),
+    path('auth/profile/', auth.auth_profile, name='auth_profile'),
     path('auth/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    
+    # REST API routes
+    path('', include(router.urls)),
+    path('', include(trips_router.urls)),
+    path('', include(logs_router.urls)),
 ]
-
