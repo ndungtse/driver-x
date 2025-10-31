@@ -3,7 +3,7 @@
 import { useDailyLogs } from '../hooks/useDailyLogs';
 import { useActivities } from '../hooks/useActivities';
 import { useStartTrip } from '../hooks/useStartTrip';
-import { Trip } from '@/types/models';
+import { DailyLog, Trip } from '@/types/models';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -11,13 +11,16 @@ import { format } from 'date-fns';
 import { AddActivityDrawer } from './AddActivityDrawer';
 import { ActivityItem } from './ActivityItem';
 import { PlusIcon, PlayIcon } from 'lucide-react';
+import { ApiResponse } from '@/types/api';
 
 interface TripTimelineProps {
   trip: Trip;
+  dailyLogsData: ApiResponse<DailyLog[]> | undefined;
+  isLoading: boolean;
 }
 
-export function TripTimeline({ trip }: TripTimelineProps) {
-  const { data: dailyLogsData, isLoading } = useDailyLogs(trip.id);
+export function TripTimeline({ trip, dailyLogsData, isLoading }: TripTimelineProps) {
+  // const { data: dailyLogsData, isLoading } = useDailyLogs(trip.id);
   const startTripMutation = useStartTrip(trip.id);
 
   const dailyLogs = dailyLogsData?.success && dailyLogsData.data
