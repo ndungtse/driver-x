@@ -5,6 +5,7 @@ import { useTrip } from '@/features/trips/hooks/useTrips';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card } from '@/components/ui/card';
 import { TripTimeline } from '@/features/trips/components/TripTimeline';
+import { LogbookView } from '@/features/logbook/components/LogbookView';
 
 export default function TripDetailPage({
   params,
@@ -48,12 +49,7 @@ export default function TripDetailPage({
         </TabsContent>
 
         <TabsContent value="logbook" className="mt-6">
-          <Card>
-            <div className="p-6">
-              <h2 className="text-xl font-semibold mb-4">Logbook</h2>
-              <p className="text-muted-foreground">Logbook view coming soon...</p>
-            </div>
-          </Card>
+          <LogbookView trip={trip} />
         </TabsContent>
 
         <TabsContent value="map" className="mt-6">
