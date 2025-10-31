@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -19,13 +20,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-bc@79jr$_f9qq0qwjw25_87#qbjzc$(#%u@!jqc1fk&%ca_wsy'
+SECRET_KEY = os.environ.get(
+    'DJANGO_SECRET_KEY',
+    'django-insecure-bc@79jr$_f9qq0qwjw25_87#qbjzc$(#%u@!jqc1fk&%ca_wsy' # Only for development
+)
+DEBUG = os.environ.get('DJANGO_DEBUG', 'True').lower() in ('true', '1', 'yes')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    host.strip() 
+    for host in os.environ.get('DJANGO_ALLOWED_HOSTS', '').split(',') 
+    if host.strip()
+] if os.environ.get('DJANGO_ALLOWED_HOSTS') else []
 
 
 # Application definition
@@ -142,11 +147,15 @@ REST_FRAMEWORK = {
 }
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
+    origin.strip()
+    for origin in os.environ.get(
+        'CORS_ALLOWED_ORIGINS',
+        'http://localhost:3000,http://127.0.0.1:3000'
+    ).split(',')
+    if origin.strip()
 ]
 
-CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_CREDENTIALS = os.environ.get('CORS_ALLOW_CREDENTIALS', 'True').lower() in ('true', '1', 'yes')
 
 SPECTACULAR_SETTINGS = {
     'TITLE': 'Driver Tracker API',
