@@ -10,7 +10,8 @@ import { useDailyLogs } from "@/features/trips/hooks/useDailyLogs";
 import { useTrip } from "@/features/trips/hooks/useTrips";
 import { activeDailyLogAtom } from "@/lib/atoms";
 import { useAtom } from "jotai";
-import { PlusIcon } from "lucide-react";
+import { ArrowLeft, PlusIcon } from "lucide-react";
+import Link from "next/link";
 import { use, useState, useMemo } from "react";
 
 export default function TripDetailPage({
@@ -30,7 +31,7 @@ export default function TripDetailPage({
     if (!dailyLogsData?.success || !dailyLogsData.data) return [];
 
     const logs = Array.isArray(dailyLogsData.data) ? dailyLogsData.data : [];
-    
+
     return logs.flatMap((log) => log.activities || []);
   }, [dailyLogsData]);
 
@@ -48,11 +49,19 @@ export default function TripDetailPage({
     <div className="space-y-6 flex flex-col gap-4">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">{trip.name || `Trip ${trip.id}`}</h1>
+          <h1 className="text-3xl font-bold">
+            {trip.name || `Trip ${trip.id}`}
+          </h1>
           <p className="text-muted-foreground">
             {trip.status} • {trip.total_distance.toFixed(0)} miles
           </p>
         </div>
+        <Button variant="outline" asChild>
+          <Link href={"/trips"}>
+            <ArrowLeft />
+            Back to trips
+          </Link>
+        </Button>
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">

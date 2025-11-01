@@ -4,9 +4,9 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 
 export default function RegisterPage() {
   return (
-    <Card className="w-full max-w-xl">
+    <Card className="w-full backdrop-blur-sm bg-card/95 border-border/50">
       <CardHeader>
-        <CardTitle>Register</CardTitle>
+        <CardTitle className="text-2xl">Register</CardTitle>
         <CardDescription>Create a new driver account</CardDescription>
       </CardHeader>
       <CardContent>

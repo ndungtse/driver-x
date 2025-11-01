@@ -1,13 +1,12 @@
 import Link from 'next/link';
 import { LoginForm } from '@/features/auth/components/LoginForm';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 
 export default function LoginPage() {
   return (
-    <Card className="w-full max-w-md">
+    <Card className="w-full backdrop-blur-sm bg-card/95 border-border/50">
       <CardHeader>
-        <CardTitle>Login</CardTitle>
+        <CardTitle className="text-2xl">Login</CardTitle>
         <CardDescription>Sign in to your driver account</CardDescription>
       </CardHeader>
       <CardContent>

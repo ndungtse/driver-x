@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { LogOutIcon } from 'lucide-react';
+import { ModeToggle } from './ThemeToggle';
 
 export function DashboardHeader() {
   const { user, logout } = useAuth();
@@ -33,9 +35,11 @@ export function DashboardHeader() {
               </div>
             </div>
           )}
-          <Button variant="outline" onClick={logout} size="sm">
-            Logout
+          <Button variant="outline" onClick={logout} size="icon" >
+            <LogOutIcon />
+            <span className="sr-only">Logout</span>
           </Button>
+          <ModeToggle />
         </div>
       </div>
     </header>

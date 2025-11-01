@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { DashboardHeader } from "@/components/DashboardHeader";
+import { DashboardBackground } from "@/components/shared/DashboardBackground";
 import { GOOGLE_MAPS_API_KEY } from "@/lib/env";
 import Script from "next/script";
 
@@ -44,9 +45,12 @@ export default function DashboardLayout({
         async
         defer
       />
-      <div className="min-h-screen bg-background">
-        <DashboardHeader />
-        <main className="container mx-auto px-4 py-6">{children}</main>
+      <div className="min-h-screen bg-background relative">
+        <DashboardBackground />
+        <div className="relative z-10">
+          <DashboardHeader />
+          <main className="container mx-auto px-4 py-6">{children}</main>
+        </div>
       </div>
     </>
   );
