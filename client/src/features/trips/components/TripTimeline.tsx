@@ -115,7 +115,7 @@ function DailyLogSection({ dailyLog, trip }: DailyLogSectionProps) {
               {activities.length} {activities.length === 1 ? 'activity' : 'activities'}
             </CardDescription>
           </div>
-          <AddActivityDrawer dailyLogId={dailyLog.id} trip={trip}>
+          <AddActivityDrawer dailyLogId={dailyLog.id} trip={trip} lastActivity={activities[activities.length - 1]}>
             <Button size="sm">
               <PlusIcon className="mr-2 size-4" />
               Add Activity

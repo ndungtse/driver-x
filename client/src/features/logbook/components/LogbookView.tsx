@@ -145,13 +145,13 @@ export function LogbookView({ dailyLogsData, isLoading, setActiveDailyLog }: Log
 
       {validation &&
         (!validation.isValid || validation.warnings.length > 0) && (
-          <Alert variant={validation.isValid ? "default" : "destructive"}>
+          <Alert variant={validation.isValid ? "default" : "warning"}>
             <AlertCircleIcon className="size-4" />
             <AlertDescription>
               <div className="space-y-1">
                 {validation.errors.length > 0 && (
                   <div>
-                    <p className="font-medium">Errors:</p>
+                    <p className="font-medium">Warnings:</p>
                     <ul className="list-disc list-inside ml-2">
                       {validation.errors.map((error, idx) => (
                         <li key={idx} className="text-sm">
@@ -161,7 +161,7 @@ export function LogbookView({ dailyLogsData, isLoading, setActiveDailyLog }: Log
                     </ul>
                   </div>
                 )}
-                {validation.warnings.length > 0 && (
+                {/* {validation.warnings.length > 0 && (
                   <div>
                     <p className="font-medium">Warnings:</p>
                     <ul className="list-disc list-inside ml-2">
@@ -172,7 +172,7 @@ export function LogbookView({ dailyLogsData, isLoading, setActiveDailyLog }: Log
                       ))}
                     </ul>
                   </div>
-                )}
+                )} */}
               </div>
             </AlertDescription>
           </Alert>

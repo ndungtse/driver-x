@@ -105,6 +105,7 @@ class TimelineService:
             end_time=end_time,
             duration_minutes=duration_minutes,
             location=activity_data.get('location', {}),
+            end_location=activity_data.get('end_location', {}),
             remark=activity_data.get('remark', ''),
             miles_driven=activity_data.get('miles_driven'),
             sequence=sequence

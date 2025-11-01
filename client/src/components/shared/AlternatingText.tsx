@@ -87,7 +87,7 @@ export function AlternatingText() {
                   setIsVisible(true);
                 }, 300);
               }}
-              className={`h-1.5 rounded-full transition-all ${
+              className={`h-1.5 rounded-full duration-300 transition-all ${
                 index === currentIndex
                   ? 'w-8 bg-primary'
                   : 'w-1.5 bg-muted-foreground/30'

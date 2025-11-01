@@ -27,7 +27,7 @@ export function getResError(error: any, defaultMessage: string = 'Unknown error 
       const { data } = error.response;
   
       // Check common error message structures
-      if (data?.error?.details) return getMessage(data.error.details);
+      if (data?.error) return getMessage(data.error);
       if (data?.message) return getMessage(data.message);
       if (data?.error?.message) return getMessage(data.error.message);
       if (data?.error) return typeof data.error === 'string' ? data.error : 'An error occurred';

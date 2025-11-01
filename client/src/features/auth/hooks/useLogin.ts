@@ -36,7 +36,6 @@ export function useLogin() {
       }
     },
     onError: (error) => {
-      console.log('error', error);
       const message = getResError(error) || 'Login failed';
       toast.error(message);
     },

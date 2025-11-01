@@ -58,7 +58,7 @@ export function LoginForm() {
               <InputGroup>
                 <InputGroupInput {...field} type={showPassword ? 'text' : 'password'} placeholder='Enter your password' />
                 <InputGroupAddon align={"inline-end"}>
-                  <Button variant='ghost' size='icon' onClick={() => setShowPassword(!showPassword)}>
+                  <Button variant='ghost' type='button' size='icon' onClick={() => setShowPassword(!showPassword)}>
                     {showPassword ? <EyeIcon className='size-4' /> : <EyeOffIcon className='size-4' />}
                   </Button>
                 </InputGroupAddon>

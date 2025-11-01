@@ -6,6 +6,7 @@ import { authApi } from '../services/authApi';
 import { RegisterData, AuthTokens } from '@/types/api';
 import { setAuthTokens } from '@/lib/auth-utils';
 import { toast } from 'sonner';
+import { getResError } from '@/lib/fetcher';
 
 export function useRegister() {
   const router = useRouter();
@@ -40,7 +41,7 @@ export function useRegister() {
       }
     },
     onError: (error: any) => {
-      const message = error?.data?.message || error?.message || 'Registration failed';
+      const message = getResError(error) || 'Registration failed';
       toast.error(message);
     },
   });

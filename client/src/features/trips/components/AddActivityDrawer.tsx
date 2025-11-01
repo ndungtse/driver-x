@@ -92,6 +92,7 @@ interface AddActivityDrawerProps {
   children: React.ReactNode;
   initialData?: Activity;
   onClose?: () => void;
+  lastActivity?: Activity;
 }
 
 export function AddActivityDrawer({
@@ -100,6 +101,7 @@ export function AddActivityDrawer({
   children,
   initialData,
   onClose,
+  lastActivity,
 }: AddActivityDrawerProps) {
   const [open, setOpen] = useState(false);
   const isEditMode = !!initialData;
@@ -110,7 +112,7 @@ export function AddActivityDrawer({
     resolver: zodResolver(activityCreateSchema),
     defaultValues: {
       status: "driving",
-      start_time: "",
+      start_time: lastActivity?.end_time || "",
       end_time: "",
       location: trip.current_location || {},
       end_location: undefined,
@@ -133,7 +135,7 @@ export function AddActivityDrawer({
     } else if (!initialData && open) {
       form.reset({
         status: "driving",
-        start_time: "",
+        start_time: lastActivity?.end_time || "",
         end_time: "",
         location: trip.current_location || {},
         end_location: undefined,
@@ -141,7 +143,7 @@ export function AddActivityDrawer({
         miles_driven: undefined,
       });
     }
-  }, [initialData, open, form, trip.current_location]);
+  }, [initialData, open, form, trip.current_location, lastActivity]);
 
   const status = form.watch("status");
   const showMilesDriven = status === "driving";
@@ -154,7 +156,9 @@ export function AddActivityDrawer({
       location: data.location,
       end_location: data.end_location,
       remark: data.remark || "",
-      miles_driven: showMilesDriven ? data.miles_driven : undefined,
+      // miles_driven is auto-calculated on server if end_location is provided
+      // Only send if explicitly set (which shouldn't happen since field is disabled)
+      miles_driven: undefined,
     };
 
     if (isEditMode && initialData) {
@@ -318,16 +322,19 @@ export function AddActivityDrawer({
                       type="number"
                       step="0.1"
                       min="0"
-                      placeholder="0"
+                      placeholder="Auto-calculated"
                       {...field}
+                      value={field.value || ""}
                       onChange={(e) =>
                         field.onChange(parseFloat(e.target.value) || undefined)
                       }
-                      disabled={isPending}
+                      disabled={true}
+                      readOnly={true}
+                      className="bg-muted cursor-not-allowed"
                     />
                   </FormControl>
                   <FormDescription>
-                    Total miles driven during this activity
+                    Automatically calculated from start and end locations when both are provided
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
