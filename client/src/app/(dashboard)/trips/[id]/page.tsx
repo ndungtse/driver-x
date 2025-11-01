@@ -48,7 +48,7 @@ export default function TripDetailPage({
     <div className="space-y-6 flex flex-col gap-4">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Trip #{trip.id}</h1>
+          <h1 className="text-3xl font-bold">{trip.name || `Trip ${trip.id}`}</h1>
           <p className="text-muted-foreground">
             {trip.status} • {trip.total_distance.toFixed(0)} miles
           </p>

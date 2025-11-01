@@ -19,6 +19,7 @@ from .trip import (
     TripSerializer,
     TripDetailSerializer,
     TripCreateSerializer,
+    TripUpdateSerializer,
     RouteSerializer,
     RequiredStopSerializer,
 )
@@ -52,6 +53,7 @@ __all__ = [
     'TripSerializer',
     'TripDetailSerializer',
     'TripCreateSerializer',
+    'TripUpdateSerializer',
     'RouteSerializer',
     'RequiredStopSerializer',
     # Log

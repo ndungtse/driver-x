@@ -6,7 +6,7 @@ class TripSerializer(serializers.ModelSerializer):
     class Meta:
         model = Trip
         fields = [
-            'id', 'driver', 'status', 'current_location', 'pickup_location',
+            'id', 'driver', 'status', 'name', 'current_location', 'pickup_location',
             'dropoff_location', 'current_cycle_hours', 'total_distance',
             'estimated_duration', 'start_datetime', 'end_datetime',
             'created_at', 'updated_at'
@@ -20,7 +20,7 @@ class TripDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Trip
         fields = [
-            'id', 'driver', 'status', 'current_location', 'pickup_location',
+            'id', 'driver', 'status', 'name', 'current_location', 'pickup_location',
             'dropoff_location', 'current_cycle_hours', 'total_distance',
             'estimated_duration', 'start_datetime', 'end_datetime',
             'created_at', 'updated_at', 'daily_logs_count'
@@ -32,7 +32,16 @@ class TripCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Trip
         fields = [
-            'current_location', 'pickup_location', 'dropoff_location',
+            'name', 'current_location', 'pickup_location', 'dropoff_location',
+            'current_cycle_hours'
+        ]
+
+
+class TripUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Trip
+        fields = [
+            'name', 'current_location', 'pickup_location', 'dropoff_location',
             'current_cycle_hours'
         ]
 

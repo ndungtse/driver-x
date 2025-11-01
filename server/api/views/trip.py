@@ -4,9 +4,10 @@ from rest_framework.permissions import IsAuthenticated
 from drf_spectacular.utils import extend_schema, OpenApiResponse
 
 from ..models import Trip, TripStatus
-from ..serializers import TripSerializer, TripDetailSerializer, TripCreateSerializer, RouteSerializer
+from ..serializers import TripSerializer, TripDetailSerializer, TripCreateSerializer, TripUpdateSerializer, RouteSerializer
 from ..response import success_response, error_response
 from ..services.route_calculator import RouteCalculator
+from ..services.trip_updater import TripUpdateService
 from ..services.hos_validator import HOSValidator
 from django.utils import timezone
 
@@ -37,6 +38,8 @@ class TripViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         if self.action == 'create':
             return TripCreateSerializer
+        elif self.action in ['update', 'partial_update']:
+            return TripUpdateSerializer
         elif self.action == 'retrieve':
             return TripDetailSerializer
         return TripSerializer
@@ -68,6 +71,14 @@ class TripViewSet(viewsets.ModelViewSet):
         self.perform_create(serializer)
         
         trip = serializer.instance
+        
+        # Calculate route distance on creation if locations are provided
+        if trip.current_location and trip.dropoff_location:
+            try:
+                RouteCalculator.calculate_route(trip)
+            except Exception:
+                pass  # Don't fail trip creation if route calculation fails
+        
         return success_response(
             message='Trip created successfully',
             data=TripDetailSerializer(trip).data,
@@ -75,11 +86,41 @@ class TripViewSet(viewsets.ModelViewSet):
         )
     
     def update(self, request, *args, **kwargs):
-        """Update trip with standardized response"""
-        response = super().update(request, *args, **kwargs)
+        """Update trip with standardized response and recalculate distance"""
+        trip = self.get_object()
+        
+        # Track which fields are being updated to check if locations changed
+        partial = kwargs.pop('partial', False)
+        serializer = self.get_serializer(trip, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        
+        # Check if locations changed before saving
+        old_locations = {
+            'current_location': trip.current_location,
+            'pickup_location': trip.pickup_location,
+            'dropoff_location': trip.dropoff_location,
+        }
+        
+        serializer.save()
+        trip.refresh_from_db()
+        
+        # Check if locations actually changed
+        locations_changed = any(
+            old_locations.get(field) != getattr(trip, field)
+            for field in ['current_location', 'pickup_location', 'dropoff_location']
+        )
+        
+        # Recalculate distance if locations changed
+        if locations_changed and trip.current_location and trip.dropoff_location:
+            try:
+                RouteCalculator.calculate_route(trip)
+                trip.refresh_from_db()
+            except Exception:
+                pass  # Don't fail update if route calculation fails
+        
         return success_response(
             message='Trip updated successfully',
-            data=response.data
+            data=TripDetailSerializer(trip).data
         )
     
     def destroy(self, request, *args, **kwargs):
@@ -102,11 +143,7 @@ class TripViewSet(viewsets.ModelViewSet):
         
         try:
             route = RouteCalculator.calculate_route(trip)
-            
-            # Update trip with calculated distance
-            trip.total_distance = route.total_distance
-            trip.estimated_duration = route.estimated_time
-            trip.save()
+            trip.refresh_from_db()
             
             return success_response(
                 message='Route calculated successfully',

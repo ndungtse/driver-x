@@ -33,6 +33,7 @@ class TripStatus(models.TextChoices):
 class Trip(models.Model):
     driver = models.ForeignKey(Driver, on_delete=models.CASCADE, related_name='trips')
     status = models.CharField(max_length=32, choices=TripStatus.choices, default=TripStatus.PLANNING)
+    name = models.CharField(max_length=128, blank=True, null=True)
 
     # Inputs
     current_location = models.JSONField(default=dict)
@@ -50,7 +51,8 @@ class Trip(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
-        return f"Trip {self.id} - {self.driver.user.username} ({self.status})"
+        name = self.name or f"Trip {self.id}"
+        return f"{name} - {self.driver.user.username} ({self.status})"
 
 
 class DailyLog(models.Model):

@@ -2,6 +2,9 @@
 
 A full-stack application for truck drivers to plan trips, track Hours of Service (HOS), and generate compliant Electronic Logging Device (ELD) logbook sheets. The system calculates optimal routes with required rest stops and automatically generates daily log sheets according to FMCSA regulations.
 
+*Demo is available at [https://driver-x.vercel.app/](https://driver-x.vercel.app/)*
+*API Documentation is available at [https://driver-x.onrender.com/api/docs](https://driver-x.onrender.com/api/docs)*
+
 ## Overview
 
 Driver Tracker helps property-carrying drivers comply with Hours of Service regulations by:
@@ -190,6 +193,13 @@ pnpm start
 # Lint
 pnpm lint
 ```
+
+## Deployment
+
+- We are using Render for the server and Vercel for the client.
+- We are using Docker Compose for the deployment ( used on Render).
+- [Client](https://driver-x.vercel.app/)
+- [API Documentation](https://driver-x.onrender.com/api/docs)
 
 ## Documentation
 

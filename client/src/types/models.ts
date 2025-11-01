@@ -39,6 +39,7 @@ export interface Trip {
   id: number;
   driver: number;
   status: TripStatus;
+  name?: string | null;
   current_location: Location;
   pickup_location: Location;
   dropoff_location: Location;

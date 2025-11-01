@@ -49,6 +49,7 @@ export interface RegisterData {
 }
 
 export interface TripCreateData {
+  name?: string | null;
   current_location: Location;
   pickup_location: Location;
   dropoff_location: Location;

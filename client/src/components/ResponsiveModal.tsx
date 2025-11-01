@@ -27,7 +27,7 @@ type ResponsiveModalProps = {
   open: boolean;
   setOpen: (open: boolean) => void;
   className?: string;
-  trigger: React.ReactNode;
+  trigger?: React.ReactNode;
 };
 
 export function ResponsiveModal({
@@ -44,7 +44,7 @@ export function ResponsiveModal({
   if (isDesktop) {
     return (
       <Drawer open={open} onOpenChange={setOpen} direction="right">
-        <DrawerTrigger asChild>{trigger}</DrawerTrigger>
+        {trigger && <DrawerTrigger asChild>{trigger}</DrawerTrigger>}
         <DrawerContent className={className}>
           <DrawerHeader className={cn("text-left", className)}>
             <DrawerTitle>{title}</DrawerTitle>
@@ -60,7 +60,7 @@ export function ResponsiveModal({
 
   return (
     <Drawer open={open} onOpenChange={setOpen} direction="bottom">
-      <DrawerTrigger asChild>{trigger}</DrawerTrigger>
+      {trigger && <DrawerTrigger asChild>{trigger}</DrawerTrigger>}
       <DrawerContent className={className}>
         <DrawerHeader className={cn("text-left", className)}>
           <DrawerTitle>{title}</DrawerTitle>

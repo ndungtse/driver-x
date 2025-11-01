@@ -1,7 +1,7 @@
 'use client';
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Trip } from '@/types/models';
 
 interface TripCardProps {
@@ -26,12 +26,16 @@ export function TripCard({ trip }: TripCardProps) {
     return status.replace('_', ' ').replace(/\b\w/g, (l) => l.toUpperCase());
   };
 
+  const tripName = trip.name || `Trip #${trip.id}`;
+
   return (
-    <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+    <Card className="hover:shadow-lg transition-shadow">
       <CardHeader>
         <div className="flex items-center justify-between">
-          <CardTitle>Trip #{trip.id}</CardTitle>
-          <Badge variant={getStatusColor(trip.status)}>{formatStatus(trip.status)}</Badge>
+          <CardTitle>{tripName}</CardTitle>
+          <div className="flex items-center gap-2">
+            <Badge variant={getStatusColor(trip.status)}>{formatStatus(trip.status)}</Badge>
+          </div>
         </div>
         <CardDescription>
           {trip.total_distance.toFixed(0)} miles
